@@ -1,0 +1,246 @@
+"use client";
+
+import { motion } from "framer-motion";
+
+const AnimatedVoxioLogo = () => {
+  return (
+    <motion.svg
+      width="150"
+      height="150"
+      viewBox="0 0 510 510"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      animate={{ y: [0, -4, 0] }}
+      transition={{
+        duration: 6,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    >
+      <rect
+        x="24"
+        y="24"
+        width="462"
+        height="462"
+        rx="80"
+        fill="url(#paint0_linear_28_21)"
+      />
+
+      <path
+        d="M430 238C430 193.709 411.563 151.232 378.744 119.913C345.925 88.5946 301.413 71 255 71C208.587 71 164.075 88.5946 131.256 119.913C98.4375 151.232 80 193.709 80 238L101.697 238C101.697 199.2 117.848 161.989 146.598 134.554C175.348 107.118 214.341 91.7047 255 91.7047C295.659 91.7047 334.652 107.118 363.402 134.554C392.152 161.989 408.303 199.2 408.303 238H430Z"
+        fill="url(#paint1_linear_28_21)"
+      />
+
+      <path
+        d="M283.615 382.42C311.213 411.79 239.282 448.601 162.597 412.674C85.9127 376.748 86.3863 327.673 99.4943 306.521C121.404 392.018 250.13 423.142 235.04 385.069C221.075 349.834 247.783 344.287 283.615 382.42Z"
+        fill="url(#paint2_linear_28_21)"
+      />
+
+      <ellipse cx="80" cy="292" rx="34" ry="82" fill="#081142" />
+      <ellipse cx="430" cy="292" rx="34" ry="82" fill="#081142" />
+      <path
+        d="M458.255 291.44C458.404 260.125 453.75 236.116 443.477 236.067C433.204 236.018 429.411 261.985 429.271 291.302C429.131 320.618 436.338 347.971 442.942 348.002C449.546 348.034 458.105 322.756 458.255 291.44Z"
+        fill="#737FBC"
+      />
+      <path
+        d="M80.2549 291.44C80.4045 260.125 75.7496 236.116 65.4767 236.067C55.2038 236.018 51.4107 261.985 51.2706 291.302C51.1305 320.618 58.3378 347.971 64.9418 348.002C71.5458 348.034 80.1052 322.756 80.2549 291.44Z"
+        fill="#737FBC"
+      />
+
+      <motion.path
+        d="M255 222.5L203 101L255 191L307 101L255 222.5Z"
+        animate={{
+          fill: ["#FFFFFF", "#AAB0CF", "#FFFFFF"],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      <path
+        d="M255.368 311.724C255.368 311.724 212.582 291.746 228.935 280.545C245.288 269.343 266.711 270.156 283.537 280.705C294.069 293.236 255.368 311.724 255.368 311.724Z"
+        fill="url(#paint3_radial_28_21)"
+      />
+
+      <motion.path
+        d="M395 218.5C347 197.3 313.667 218.667 303 232V237.5C327 218.5 342.3 214.4 377.5 232C412.7 249.6 459.5 226 463.5 201C460.667 215.667 443 239.7 395 218.5Z"
+        fill="url(#paint4_linear_28_21)"
+        stroke="url(#paint5_linear_28_21)"
+        animate={{ y: [0, -6, 0] }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      <motion.path
+        d="M119.5 218.5C167.5 197.3 200.833 218.667 211.5 232V237.5C187.5 218.5 172.2 214.4 137 232C101.8 249.6 55 226 51 201C53.8333 215.667 71.5 239.7 119.5 218.5Z"
+        fill="url(#paint6_linear_28_21)"
+        stroke="url(#paint7_linear_28_21)"
+        animate={{ y: [0, -6, 0] }}
+        transition={{
+          duration: 3,
+          delay: 1.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      <motion.ellipse
+        cx="174.195"
+        cy="242.441"
+        rx="16.5"
+        ry="15"
+        transform="rotate(24.1717 174.195 242.441)"
+        fill="url(#paint8_radial_28_21)"
+        animate={{ ry: [15, 2, 15] }}
+        transition={{
+          duration: 0.25,
+          repeat: Infinity,
+          repeatDelay: 4.5,
+          ease: "easeInOut",
+        }}
+      />
+
+      <motion.ellipse
+        cx="338.195"
+        cy="244.441"
+        rx="16.5"
+        ry="15"
+        transform="rotate(24.1717 338.195 244.441)"
+        fill="url(#paint9_radial_28_21)"
+        animate={{ ry: [15, 2, 15] }}
+        transition={{
+          duration: 0.25,
+          delay: 0.1,
+          repeat: Infinity,
+          repeatDelay: 4.5,
+          ease: "easeInOut",
+        }}
+      />
+
+      <defs>
+        <linearGradient
+          id="paint0_linear_28_21"
+          x1="255"
+          y1="24"
+          x2="255"
+          y2="486"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.413462" stopColor="#E08116" />
+          <stop offset="0.721154" stopColor="#E2B376" />
+          <stop offset="1" stopColor="#E4E5D6" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_28_21"
+          x1="80"
+          y1="237.793"
+          x2="430"
+          y2="238.207"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#2A3882" />
+          <stop offset="0.105769" stopColor="#081142" />
+          <stop offset="0.865385" stopColor="#081142" />
+          <stop offset="1" stopColor="#2A3882" />
+        </linearGradient>
+        <linearGradient
+          id="paint2_linear_28_21"
+          x1="285.593"
+          y1="421.658"
+          x2="93.5395"
+          y2="322.949"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.591346" stopColor="#081142" />
+          <stop offset="1" stopColor="#2A3882" />
+        </linearGradient>
+        <radialGradient
+          id="paint3_radial_28_21"
+          cx="0"
+          cy="0"
+          r="1"
+          gradientTransform="matrix(9.07528 19.6228 -29.98 19.5124 246.604 292.096)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#AAB0CF" />
+          <stop offset="1" stopColor="#081142" />
+        </radialGradient>
+        <linearGradient
+          id="paint4_linear_28_21"
+          x1="303"
+          y1="219.552"
+          x2="463.5"
+          y2="219.552"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.283654" stopColor="#081142" />
+          <stop offset="1" stopColor="#AABA8C" />
+        </linearGradient>
+        <linearGradient
+          id="paint5_linear_28_21"
+          x1="303"
+          y1="219.552"
+          x2="463.5"
+          y2="219.552"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#081142" />
+          <stop offset="1" stopColor="#AABA8C" />
+        </linearGradient>
+        <linearGradient
+          id="paint6_linear_28_21"
+          x1="211.5"
+          y1="219.552"
+          x2="51"
+          y2="219.552"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0.216346" stopColor="#081142" />
+          <stop offset="1" stopColor="#AABA8C" />
+        </linearGradient>
+        <linearGradient
+          id="paint7_linear_28_21"
+          x1="211.5"
+          y1="219.552"
+          x2="51"
+          y2="219.552"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#081142" />
+          <stop offset="1" stopColor="#AABA8C" />
+        </linearGradient>
+        <radialGradient
+          id="paint8_radial_28_21"
+          cx="0"
+          cy="0"
+          r="1"
+          gradientTransform="matrix(11.458 9.65478 -11.1278 11.4545 171.146 242.23)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="white" />
+          <stop offset="0.817308" stopColor="#EDB51E" />
+          <stop offset="1" stopColor="#070F37" />
+        </radialGradient>
+        <radialGradient
+          id="paint9_radial_28_21"
+          cx="0"
+          cy="0"
+          r="1"
+          gradientTransform="matrix(11.458 9.65478 -11.1278 11.4545 335.146 244.23)"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="white" />
+          <stop offset="0.817308" stopColor="#EDB51E" />
+          <stop offset="1" stopColor="#070F37" />
+        </radialGradient>
+      </defs>
+    </motion.svg>
+  );
+};
+
+export default AnimatedVoxioLogo;
