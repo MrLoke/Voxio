@@ -1,28 +1,29 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { updateSession } from "./lib/supabase/updateSession";
+
 import {
   PUBLIC_ROUTES,
-  HOME_ROUTE,
-  DASHBOARD_ROUTE,
   SIGNIN_ROUTE,
+  DASHBOARD_ROUTE,
+  HOME_ROUTE,
   SIGNUP_ROUTE,
-} from "./lib/constants";
+} from "@/lib/constants";
 
 export async function middleware(request: NextRequest) {
-  const response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  let response = await updateSession(request);
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll: () => request.cookies.getAll(),
-        setAll: (cookiesToSet) => {
-          cookiesToSet.forEach(({ name, value, options }) => {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        // Set cookies for temporary response, main cookies are set in updateSession
+        setAll(cookies) {
+          cookies.forEach(({ name, value, options }) => {
             response.cookies.set(name, value, options);
           });
         },
@@ -30,37 +31,46 @@ export async function middleware(request: NextRequest) {
     }
   );
 
+  const pathname = request.nextUrl.pathname.replace(/\/+$/, "") || "/";
+
+  // Redirect instant to /dashboard after verifying email because
+  // after clicking the link you got code in the url like this /signin?code=...
+
+  const code = request.nextUrl.searchParams.get("code");
+
+  if (code && [SIGNIN_ROUTE, SIGNUP_ROUTE].includes(pathname)) {
+    await supabase.auth.exchangeCodeForSession(code);
+
+    const url = request.nextUrl.clone();
+    url.searchParams.delete("code");
+    url.pathname = DASHBOARD_ROUTE;
+
+    response = NextResponse.redirect(url, { headers: response.headers });
+
+    return response;
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const createRedirectUrl = (path: string) => {
+  const isProtectedRoutes = !PUBLIC_ROUTES.includes(pathname);
+
+  if (!user && isProtectedRoutes) {
     const url = request.nextUrl.clone();
-    url.pathname = path;
-    return url;
-  };
-
-  const pathname = request.nextUrl.pathname;
-  const isProtectedRoute = !PUBLIC_ROUTES.includes(pathname);
-
-  if (
-    user &&
-    (pathname === HOME_ROUTE ||
-      pathname === SIGNIN_ROUTE ||
-      pathname === SIGNUP_ROUTE) // FIX IT - this is ugly asf
-  ) {
-    return NextResponse.redirect(createRedirectUrl(DASHBOARD_ROUTE));
+    url.pathname = SIGNIN_ROUTE;
+    return NextResponse.redirect(url);
   }
 
-  if (!user && isProtectedRoute) {
-    return NextResponse.redirect(createRedirectUrl(SIGNIN_ROUTE));
+  if (user && [HOME_ROUTE, SIGNIN_ROUTE, SIGNUP_ROUTE].includes(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = DASHBOARD_ROUTE;
+    return NextResponse.redirect(url);
   }
-
-  await supabase.auth.getUser();
 
   return response;
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|.*\\.).*)"],
+  matcher: ["/((?!_next|favicon.ico|.*\\.|api/).*)", "/"],
 };
