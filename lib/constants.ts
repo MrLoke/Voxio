@@ -1,16 +1,26 @@
-// --- AUTH ---
+// ------ AUTH ------
 export const MIN_PASSWORD_LENGTH = 6;
 export const MAX_PASSWORD_LENGTH = 72;
 export const MIN_USERNAME_LENGTH = 3;
 export const MAX_USERNAME_LENGTH = 30;
 
-// --- ROUTES ---
+// ------ API ------
+export const API_HCAPTCHA = "https://api.hcaptcha.com/siteverify";
+
+// ------ APP ------
+export const MOBILE_BREAKPOINT = 768;
+export const MAX_UPLOAD_AVATAR_SIZE = 5242880; // 5MB
+
+// ------ ROUTES ------
 export const HOME_ROUTE = "/";
 export const SIGNIN_ROUTE = "/signin";
 export const SIGNUP_ROUTE = "/signup";
 export const AUTH_CALLBACK_ROUTE = "/auth/callback";
 export const VERIFY_EMAIL_ROUTE = "/auth/verify-email";
+export const RESET_PASSWORD_ROUTE = "/reset-password";
 export const DASHBOARD_ROUTE = "/dashboard";
+export const NOTIFICATIONS_ROUTE = "/notifications";
+export const SETTINGS_ROUTE = "/settings";
 
 export const PUBLIC_ROUTES = [
   HOME_ROUTE,
