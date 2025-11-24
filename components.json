@@ -6,7 +6,7 @@
   "tailwind": {
     "config": "",
     "css": "app/globals.css",
-    "baseColor": "zinc",
+    "baseColor": "slate",
     "cssVariables": true,
     "prefix": ""
   },
@@ -19,6 +19,7 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@react-bits": "https://reactbits.dev/r/{name}.json"
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
+    "@supabase": "https://supabase.com/ui/r/{name}.json"
   }
 }
