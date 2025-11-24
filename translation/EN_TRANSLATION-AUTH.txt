@@ -1,0 +1,68 @@
+Sign in to VOXIO
+
+Sign in
+
+E-mail
+
+E-mail address
+
+Password
+
+Enter your password
+
+Login...
+
+Confirm password
+
+Confirm your password
+
+Don't have an account? Sign up
+
+Sign up
+
+Create an account at VOXIO
+
+Already have an account? Sign in
+
+Creating an account...
+
+Username
+
+Your username
+
+Choose your avatar
+
+Keep me signed in
+
+Forgot your password?
+
+Stay signed in on this device for longer. You may still be
+asked to sign in again after a period of inactivity.
+
+E-mail address is required.
+
+The email and/or password you provided is incorrect.
+
+Invalid e-mail address format.
+
+Password is required.
+
+Password must be at least ${MIN_PASSWORD_LENGTH} character long.
+
+The password must be at most ${MAX_PASSWORD_LENGTH} characters long.
+
+Username is required.
+
+Username is too long (max ${MAX_USERNAME_LENGTH} characters).
+
+Password confirmation is required.
+
+The passwords do not match.
+
+Invalid avatar URL format.
+
+Please enter your email address and password.
+
+Login error. Please try again.
+
+Registration error. Please try again.

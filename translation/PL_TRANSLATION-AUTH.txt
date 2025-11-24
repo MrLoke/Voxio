@@ -1,0 +1,68 @@
+Zaloguj się do VOXIO
+
+Zaloguj się
+
+E-mail
+
+Adres e-mail
+
+Hasło
+
+Wprowadź swoje hasło
+
+Logowanie...
+
+Potwierdź hasło
+
+Potwierdź swoje hasło
+
+Nie masz konta? Zarejestruj się
+
+Zarejestruj się
+
+Załóż konto w VOXIO
+
+Masz już konto? Zaloguj się
+
+Tworzenie konta...
+
+Twoja nazwa
+
+Nazwa użytkownika
+
+Wybierz swój awatar
+
+Zapamiętaj mnie
+
+Nie pamiętasz hasła?
+
+Pozostań zalogowany na tym urządzeniu przez dłuższy czas. Po dłuższej nieaktywności 
+możesz jednak zostać poproszony o ponowne zalogowanie się.
+
+Adres e-mail jest wymagany.
+
+Podany e-mail i/lub hasło jest nieprawidłowe.
+
+Nieprawidłowy format adresu e-mail.
+
+Hasło jest wymagane.
+
+Hasło musi mieć co najmniej ${MIN_PASSWORD_LENGTH} znaków.
+
+Hasło musi mieć co najwyżej ${MAX_PASSWORD_LENGTH} znaków.
+
+Nazwa użytkownika jest wymagana.
+
+Nazwa użytkownika jest za długa (max ${MAX_USERNAME_LENGTH} znaków).
+
+Potwierdzenie hasła jest wymagane.
+
+Hasła nie pasują do siebie.
+
+Nieprawidłowy format URL awatara.
+
+Proszę podać adres e-mail i hasło.
+
+Błąd logowania. Spróbuj ponownie.
+
+Błąd rejestracji. Spróbuj ponownie.
