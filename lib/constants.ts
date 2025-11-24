@@ -6,6 +6,7 @@ export const MAX_USERNAME_LENGTH = 30;
 
 // ------ API ------
 export const API_HCAPTCHA = "https://api.hcaptcha.com/siteverify";
+export const API_DICEBEAR = "https://api.dicebear.com/7.x/initials/svg?seed=";
 
 // ------ APP ------
 export const MOBILE_BREAKPOINT = 768;
