@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig = {
   images: {
     remotePatterns: [new URL("https://agdgsknwsczlqdvyomjp.supabase.co/**")],
+    qualities: [75, 100],
   },
   compiler: {
     removeConsole: false,
