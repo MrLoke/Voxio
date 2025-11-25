@@ -17,6 +17,7 @@ export const HOME_ROUTE = "/";
 export const SIGNIN_ROUTE = "/signin";
 export const SIGNUP_ROUTE = "/signup";
 export const AUTH_CALLBACK_ROUTE = "/auth/callback";
+export const AUTH_ERROR_REDIRECT_PATH = "/auth/auth-code-error?error=";
 export const VERIFY_EMAIL_ROUTE = "/auth/verify-email";
 export const RESET_PASSWORD_ROUTE = "/reset-password";
 export const DASHBOARD_ROUTE = "/dashboard";
