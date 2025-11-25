@@ -1,0 +1,32 @@
+------AuthCodeErrorPage.tsx------
+
+We couldn’t verify your login link.
+
+Something went wrong!
+
+The link may have expired, been used already, or is no longer valid.
+
+Return to Sign In
+
+------VerifyEmailPage.tsx------
+
+✉️ You're almost there!
+
+We’ve sent a verification link to your email address.
+
+Open the link to activate your account and complete the sign-in process. 
+If you don’t see the message within a few minutes, check your Spam or Promotions folder.
+
+Go to Sign In
+
+------app/auth/callback/route.ts------
+
+Invalid or expired verification link.
+
+------GlobalErrorPage.tsx------
+
+Something went wrong...
+
+{error.message || "An unexpected error occurred."}
+
+Try again

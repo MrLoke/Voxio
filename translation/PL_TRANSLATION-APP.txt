@@ -1,0 +1,32 @@
+------AuthCodeErrorPage.tsx------
+
+Wystąpił problem z weryfikacją Twojego linku logowania.
+
+Coś poszło nie tak!
+
+Twój link mógł wygasnąć lub został już użyty.
+
+Wróć do logowania
+
+------VerifyEmailPage.tsx------
+
+✉️ Prawie gotowe!
+
+Wysłaliśmy link weryfikacyjny na Twój adres e-mail.
+
+Kliknij link, aby aktywować swoje konto i móc się zalogować. Sprawdź 
+folder SPAM, jeśli wiadomość nie dotarła w ciągu kilku minut.
+
+Przejdź do logowania
+
+------app/auth/callback/route.ts------
+
+Nieprawidłowy lub przeterminowany link weryfikacyjny.
+
+------GlobalErrorPage.tsx------
+
+Coś poszło nie tak...
+
+{error.message || "Wystąpił nieoczekiwany błąd."}
+
+Spróbuj ponownie
