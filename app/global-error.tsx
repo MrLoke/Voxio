@@ -11,7 +11,7 @@ const GlobalError = ({
     <html>
       <body>
         <h2>Something went wrong!</h2>
-        <p>{error.message}</p>
+        <p>{error.message || "An unexpected error occurred."}</p>
         <button onClick={() => reset()}>Try again</button>
       </body>
     </html>
