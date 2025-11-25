@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import { SignInFormValues } from "@/lib/schemas/authSchema";
 import {
   API_HCAPTCHA,
+  AUTH_CALLBACK_ROUTE,
   DASHBOARD_ROUTE,
   HOME_ROUTE,
-  SIGNIN_ROUTE,
   VERIFY_EMAIL_ROUTE,
 } from "@/lib/constants";
 
@@ -71,7 +71,7 @@ export const signUpAction = async (formData: FormData) => {
       password,
       options: {
         data: { username },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${SIGNIN_ROUTE}`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${AUTH_CALLBACK_ROUTE}`,
       },
     });
 
