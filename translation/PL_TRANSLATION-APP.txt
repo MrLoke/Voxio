@@ -30,3 +30,22 @@ Coś poszło nie tak...
 {error.message || "Wystąpił nieoczekiwany błąd."}
 
 Spróbuj ponownie
+
+------ShowcaseSection.tsx------
+
+Przenieś Rozmowę do Innego Wymiaru! 🦊
+
+VOXIO to innowacyjny komunikator stworzony do spontanicznych spotkań.
+
+------page.tsx------
+
+Witaj w VOXIO
+
+VOXIO to nowoczesna platforma do czatowania oraz rozmów głosowych i wideo, 
+zaprojektowana dla społeczności, zespołów i spontanicznych 
+spotkań. Dołączaj do wirtualnych pokojów, rozmawiaj bez zakłóceń i łącz 
+się z innymi — bez opóźnień i bez zbędnych komplikacji.
+
+Utwórz nowe konto
+
+Zaloguj się do VOXIO
