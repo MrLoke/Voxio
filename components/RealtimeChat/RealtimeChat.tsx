@@ -58,33 +58,59 @@ const getInitials = (name: string) => {
   );
 };
 
-export function RealtimeChat({
+export const RealtimeChat = ({
   userId,
   currentUsername,
   profileData,
-}: RealtimeChatProps) {
+}: RealtimeChatProps) => {
   const { messages, isLoading, error, setMessages } = useMessagesQuery();
   const [messageInput, setMessageInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [isAtBottom, setIsAtBottom] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleNewMessage = useCallback(
     (newMessage: Message) => {
       setMessages((prevMessages) => {
-        const filtered = prevMessages.filter(
-          (msg) =>
-            !(
+        console.log("Odebrano nową wiadomość (Realtime):", newMessage);
+
+        const isFinalMessage = !String(newMessage.id).startsWith("temp-");
+
+        if (isFinalMessage) {
+          const filteredMessages = prevMessages.filter((msg) => {
+            const isOptimisticDuplicate =
               String(msg.id).startsWith("temp-") &&
-              msg.content === newMessage.content &&
-              msg.username === newMessage.username
-            )
+              msg.user_id === newMessage.user_id &&
+              msg.content === newMessage.content;
+
+            const isFinalDuplicate = String(msg.id) === String(newMessage.id);
+
+            return !isOptimisticDuplicate && !isFinalDuplicate;
+          });
+
+          return [...filteredMessages, newMessage];
+        }
+
+        const withoutDuplicates = prevMessages.filter(
+          (msg) => String(msg.id) !== String(newMessage.id)
         );
 
-        if (filtered.some((m) => String(m.id) === String(newMessage.id))) {
-          return filtered;
+        if (!String(newMessage.id).startsWith("temp-")) {
+          return [
+            ...withoutDuplicates.filter(
+              (msg) =>
+                !(
+                  String(msg.id).startsWith("temp-") &&
+                  msg.content === newMessage.content
+                )
+            ),
+            newMessage,
+          ];
         }
-        return [...filtered, newMessage];
+
+        return [...withoutDuplicates, newMessage];
       });
     },
     [setMessages]
@@ -92,16 +118,20 @@ export function RealtimeChat({
 
   // Realtime + Typing Indicators
   const { typingUsers, sendTypingEvent } = useRealtimeMessages(
-    handleNewMessage,
-    currentUsername
+    currentUsername,
+    handleNewMessage
   );
 
+  // const messageCount = messages.length;
+
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-    return () => clearTimeout(timeoutId);
-  }, [messages, typingUsers]);
+    if (isAtBottom) {
+      const timeoutId = setTimeout(() => {
+        scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isAtBottom, messages]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -109,6 +139,18 @@ export function RealtimeChat({
       handleSubmit(e as FormEvent);
     }
     // Enter + Shift -> new line
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!scrollAreaRef.current) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+
+    const newIsAtBottom = scrollHeight - scrollTop - clientHeight < 100;
+
+    if (newIsAtBottom !== isAtBottom) {
+      setIsAtBottom(newIsAtBottom);
+    }
   };
 
   const onEmojiClick = (emojiData: EmojiClickData) => {
@@ -137,7 +179,7 @@ export function RealtimeChat({
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     typingTimeoutRef.current = setTimeout(() => {
       sendTypingEvent(false);
-    }, 5000);
+    }, 2000);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -145,19 +187,22 @@ export function RealtimeChat({
     if (!messageInput.trim()) return;
 
     const content = messageInput;
+    const optimisticKey = `${Date.now()}-${Math.random()}`;
+
     setMessageInput("");
     sendTypingEvent(false);
 
-    const tempId = `temp-${Date.now()}`;
+    const tempId = `temp-${optimisticKey}`;
+
     const optimisticMessage: Message = {
       id: tempId,
       content: content,
       username: currentUsername,
       user_id: userId,
       created_at: new Date().toISOString(),
+      // is_optimistic_key: optimisticKey, // TODO: add later
     };
 
-    // Could you add the flag isOptimistic?: boolean field to the Message type?
     setMessages((prev) => [...prev, optimisticMessage]);
 
     const { success } = await storeMessage({
@@ -197,7 +242,11 @@ export function RealtimeChat({
         </CardHeader>
 
         <CardContent className="flex-1 overflow-hidden p-0">
-          <ScrollArea className="h-full w-full p-4">
+          <ScrollArea
+            className="h-full w-full p-4"
+            ref={scrollAreaRef}
+            onScroll={handleScroll}
+          >
             <div className="flex flex-col space-y-4 pb-4">
               {messages.map((msg) => {
                 const isMe = msg.username === currentUsername;
@@ -350,4 +399,4 @@ export function RealtimeChat({
       </Card>
     </div>
   );
-}
+};
