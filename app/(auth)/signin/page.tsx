@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SignInForm } from "@/components/auth/forms/SignInForm";
 import { RESET_PASSWORD_ROUTE, SIGNUP_ROUTE } from "@/lib/constants";
-import InformationBackground from "@/components/auth/InformationBackground";
+import ShowcaseSection from "@/components/auth/ShowcaseSection";
 import AnimatedVoxioLogo from "@/components/AnimatedVoxioLogo/AnimatedVoxioLogo";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -23,7 +23,7 @@ const SignInPage = async () => {
         <div className="w-full max-w-sm">
           <div className="flex flex-col items-center">
             <AnimatedVoxioLogo />
-            <h1 className="md:text-3xl text-2xl font-bold mb-8 text-slate-800 dark:text-slate-200">
+            <h1 className="md:text-3xl text-2xl text-center font-bold font-suse mb-8 text-app-primary">
               Sign in to VOXIO
             </h1>
           </div>
@@ -40,7 +40,7 @@ const SignInPage = async () => {
             </Link>
           </p>
 
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex flex-col xs:flex-row items-center justify-between mt-6">
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="flex items-center cursor-pointer">
@@ -63,7 +63,7 @@ const SignInPage = async () => {
 
             <Link
               href={RESET_PASSWORD_ROUTE}
-              className="text-slate-800 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100 font-medium"
+              className="text-slate-800 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100 mt-2 xs:mt-0 font-medium"
             >
               Forgot your password?
             </Link>
@@ -72,7 +72,7 @@ const SignInPage = async () => {
       </div>
 
       <div className="hidden lg:flex lg:w-1/2 overflow-hidden">
-        <InformationBackground />
+        <ShowcaseSection />
       </div>
     </div>
   );

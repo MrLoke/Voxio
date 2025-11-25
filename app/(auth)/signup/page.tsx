@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { SIGNIN_ROUTE } from "@/lib/constants";
-import InformationBackground from "@/components/auth/InformationBackground";
+import ShowcaseSection from "@/components/auth/ShowcaseSection";
 import AnimatedVoxioLogo from "@/components/AnimatedVoxioLogo/AnimatedVoxioLogo";
 import { SignUpEmailForm } from "@/components/auth/forms/SignUpEmailForm";
 
@@ -16,7 +16,7 @@ const SignUpPage = () => {
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center">
             <AnimatedVoxioLogo />
-            <h1 className="md:text-3xl text-2xl font-bold mb-8 text-slate-800 dark:text-slate-200">
+            <h1 className="md:text-3xl text-2xl text-center font-bold font-suse mb-8 text-app-primary">
               Create an account at VOXIO
             </h1>
           </div>
@@ -36,7 +36,7 @@ const SignUpPage = () => {
       </div>
 
       <div className="hidden lg:flex lg:w-1/2 overflow-hidden">
-        <InformationBackground />
+        <ShowcaseSection />
       </div>
     </div>
   );
