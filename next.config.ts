@@ -8,6 +8,9 @@ const nextConfig = {
   compiler: {
     removeConsole: false,
   },
+  // experimental: {
+  //   globalNotFound: true,
+  // },
   turbopack: {
     rules: {
       "**/*.svg": {
