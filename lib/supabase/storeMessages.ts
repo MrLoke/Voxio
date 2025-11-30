@@ -4,6 +4,8 @@ type NewMessageData = {
   content: string;
   username: string;
   userId: string;
+  roomId: string;
+  attachmentUrl?: string;
 };
 
 /**
@@ -12,7 +14,7 @@ type NewMessageData = {
  */
 export const storeMessage = async (messageData: NewMessageData) => {
   const supabase = createClient();
-  const { data, error } = await supabase.from("messages").insert([
+  const { error } = await supabase.from("messages").insert([
     {
       content: messageData.content,
       username: messageData.username,
@@ -21,7 +23,7 @@ export const storeMessage = async (messageData: NewMessageData) => {
   ]);
 
   if (error) {
-    console.error("Błąd wysyłania wiadomości:", error.message);
+    console.error("Error sending message:", error.message);
     return { success: false, error: error.message };
   }
 
