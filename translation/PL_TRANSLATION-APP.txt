@@ -49,3 +49,13 @@ się z innymi — bez opóźnień i bez zbędnych komplikacji.
 Utwórz nowe konto
 
 Zaloguj się do VOXIO
+
+------GlobalNotFound.tsx------
+
+Strona, której szukasz, nie istnieje.
+
+404 — Nie znaleziono strony
+
+Ta strona nie istnieje.
+
+Wróć do panelu głównego.

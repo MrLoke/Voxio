@@ -49,3 +49,13 @@ with no delays and no unnecessary complexity.
 Create new account
 
 Sign in to VOXIO
+
+------GlobalNotFound.tsx------
+
+The page you are looking for does not exist.
+
+404 - Page Not Found
+
+This page does not exist.
+
+Back to Dashboard.
