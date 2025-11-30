@@ -12,8 +12,16 @@ import {
 } from "../ui/sidebar";
 import { signOutAction } from "@/actions/auth";
 import { createClient } from "@/lib/supabase/server";
-import { ChevronsUpDown, LogOut } from "lucide-react";
+import {
+  BellRing,
+  ChevronsUpDown,
+  CircleUserRound,
+  LogOut,
+  Settings,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import Link from "next/link";
+import { SETTINGS_ROUTE, USER_PROFILE_ROUTE } from "@/lib/constants";
 
 export const SidebarFooterSection = async () => {
   const supabase = await createClient();
@@ -64,23 +72,34 @@ export const SidebarFooterSection = async () => {
 
           <DropdownMenuContent
             side="right"
-            className="w-[--radix-popper-anchor-width] min-w-56 rounded-lg"
+            className="w-[--radix-popper-anchor-width] min-w-50 mb-2 ml-2 rounded-lg"
           >
-            <DropdownMenuItem>
-              <span>Account</span>
-            </DropdownMenuItem>
+            <Link href={USER_PROFILE_ROUTE} className="flex-auto">
+              <DropdownMenuItem className="hover:cursor-pointer">
+                <CircleUserRound className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+            </Link>
             <SidebarSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem className="hover:cursor-pointer">
+              <BellRing className="mr-2 h-4 w-4" />
               <span>Status</span>
             </DropdownMenuItem>
+            <SidebarSeparator />
+            <Link href={SETTINGS_ROUTE} className="flex-auto">
+              <DropdownMenuItem className="hover:cursor-pointer">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+            </Link>
             <SidebarSeparator />
             <DropdownMenuItem asChild>
               <form action={signOutAction} className="w-full">
                 <button
                   type="submit"
-                  className="flex w-full items-center cursor-pointer"
+                  className="flex w-full items-center hover:cursor-pointer"
                 >
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <LogOut className="mr-3 h-4 w-4" />
                   <span>Sign out</span>
                 </button>
               </form>
