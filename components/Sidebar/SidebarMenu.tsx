@@ -18,6 +18,13 @@ import {
 import { HiMiniUserGroup } from "react-icons/hi2";
 import { IoAddCircle } from "react-icons/io5";
 import { Circle } from "../ui/circle";
+import {
+  ROOMS_LIST_ROUTE,
+  DASHBOARD_ROUTE,
+  MESSAGES_ROUTE,
+  NOTIFICATIONS_ROUTE,
+  SETTINGS_ROUTE,
+} from "@/lib/constants";
 
 export const SidebarMenuSection = () => {
   const buttonClasses =
@@ -29,60 +36,68 @@ export const SidebarMenuSection = () => {
       <SidebarGroupContent>
         <SidebarMenu className="gap-2">
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Dashboard" className={buttonClasses}>
-              <Link href="/dashboard" className="flex items-center">
+            <Link href={DASHBOARD_ROUTE} className="flex font-medium">
+              <SidebarMenuButton tooltip="Dashboard" className={buttonClasses}>
                 <Circle>
                   <BiSolidHome className="h-5 w-5" />
                 </Circle>
-                <span className="pl-2 group-data-[collapsible=icon]:hidden">
+                <span className="group-data-[collapsible=icon]:hidden">
                   Dashboard
                 </span>
-              </Link>
-            </SidebarMenuButton>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip="Notifications"
-              className={buttonClasses}
-            >
-              <Circle>
-                <BiSolidBell className="h-5 w-5" />
-              </Circle>
-              <span className="group-data-[collapsible=icon]:hidden">
-                Notifications
-              </span>
-            </SidebarMenuButton>
+            <Link href={NOTIFICATIONS_ROUTE} className="flex font-medium">
+              <SidebarMenuButton
+                tooltip="Notifications"
+                className={buttonClasses}
+              >
+                <Circle>
+                  <BiSolidBell className="h-5 w-5" />
+                </Circle>
+                <span className="group-data-[collapsible=icon]:hidden">
+                  Notifications
+                </span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Messages" className={buttonClasses}>
-              <Circle>
-                <BiSolidChat className="h-5 w-5" />
-              </Circle>
-              <span className="group-data-[collapsible=icon]:hidden">
-                Messages
-              </span>
-            </SidebarMenuButton>
+            <Link href={MESSAGES_ROUTE} className="flex font-medium">
+              <SidebarMenuButton tooltip="Messages" className={buttonClasses}>
+                <Circle>
+                  <BiSolidChat className="h-5 w-5" />
+                </Circle>
+                <span className="group-data-[collapsible=icon]:hidden">
+                  Messages
+                </span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Settings" className={buttonClasses}>
-              <Circle>
-                <BiSolidCog className="h-5 w-5" />
-              </Circle>
-              <span className="group-data-[collapsible=icon]:hidden">
-                Settings
-              </span>
-            </SidebarMenuButton>
+            <Link href={SETTINGS_ROUTE} className="flex font-medium">
+              <SidebarMenuButton tooltip="Settings" className={buttonClasses}>
+                <Circle>
+                  <BiSolidCog className="h-5 w-5" />
+                </Circle>
+                <span className="group-data-[collapsible=icon]:hidden">
+                  Settings
+                </span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
 
-      <SidebarGroupLabel className="mt-2">Rooms</SidebarGroupLabel>
+      <SidebarGroupLabel className="mt-2 group-data-[collapsible=icon]:hidden">
+        Rooms
+      </SidebarGroupLabel>
       <SidebarGroupContent className="mt-2 group-data-[collapsible=icon]:mt-8">
         <SidebarMenu className="gap-2">
-          <SidebarMenuItem className="mb-2">
+          <SidebarMenuItem className="mb-2 font-medium">
             <SidebarMenuButton tooltip="Add new room" className={buttonClasses}>
               <Circle>
                 <IoAddCircle className="h-5 w-5" />
@@ -94,36 +109,51 @@ export const SidebarMenuSection = () => {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="#Test Room 1" className={buttonClasses}>
-              <Circle>
-                <HiMiniUserGroup className="h-5 w-5" />
-              </Circle>
-              <span className="group-data-[collapsible=icon]:hidden">
-                #Test Room 1
-              </span>
-            </SidebarMenuButton>
+            <Link href={ROOMS_LIST_ROUTE} className="flex font-medium">
+              <SidebarMenuButton
+                tooltip="#Test Room 1"
+                className={buttonClasses}
+              >
+                <Circle>
+                  <HiMiniUserGroup className="h-5 w-5" />
+                </Circle>
+                <span className="group-data-[collapsible=icon]:hidden">
+                  #Test Room 1
+                </span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="#Test Room 2" className={buttonClasses}>
-              <Circle>
-                <HiMiniUserGroup className="h-5 w-5" />
-              </Circle>
-              <span className="group-data-[collapsible=icon]:hidden">
-                #Test Room 2
-              </span>
-            </SidebarMenuButton>
+            <Link href={ROOMS_LIST_ROUTE} className="flex font-medium">
+              <SidebarMenuButton
+                tooltip="#Test Room 2"
+                className={buttonClasses}
+              >
+                <Circle>
+                  <HiMiniUserGroup className="h-5 w-5" />
+                </Circle>
+                <span className="group-data-[collapsible=icon]:hidden">
+                  #Test Room 2
+                </span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="#Test Room 3" className={buttonClasses}>
-              <Circle>
-                <HiMiniUserGroup className="h-5 w-5" />
-              </Circle>
-              <span className="group-data-[collapsible=icon]:hidden">
-                #Test Room 3
-              </span>
-            </SidebarMenuButton>
+            <Link href={ROOMS_LIST_ROUTE} className="flex font-medium">
+              <SidebarMenuButton
+                tooltip="#Test Room 3"
+                className={buttonClasses}
+              >
+                <Circle>
+                  <HiMiniUserGroup className="h-5 w-5" />
+                </Circle>
+                <span className="group-data-[collapsible=icon]:hidden">
+                  #Test Room 3
+                </span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarGroupContent>
