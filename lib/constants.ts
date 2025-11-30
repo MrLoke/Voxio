@@ -20,7 +20,10 @@ export const AUTH_CALLBACK_ROUTE = "/auth/callback";
 export const AUTH_ERROR_REDIRECT_PATH = "/auth/auth-code-error?error=";
 export const VERIFY_EMAIL_ROUTE = "/auth/verify-email";
 export const RESET_PASSWORD_ROUTE = "/reset-password";
+export const USER_PROFILE_ROUTE = "/profile";
 export const DASHBOARD_ROUTE = "/dashboard";
+export const MESSAGES_ROUTE = "/messages";
+export const ROOMS_LIST_ROUTE = "/rooms";
 export const NOTIFICATIONS_ROUTE = "/notifications";
 export const SETTINGS_ROUTE = "/settings";
 
