@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 
-export default async function DashboardPage() {
+const DashboardPage = async () => {
   const supabase = await createClient();
 
   const {
@@ -13,7 +13,7 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return redirect(SIGNIN_ROUTE); // Just in case, cuz middleware should catch this
+    return redirect(SIGNIN_ROUTE);
   }
 
   const { data: profileData, error: profileError } = await supabase
@@ -23,19 +23,20 @@ export default async function DashboardPage() {
     .maybeSingle();
 
   if (profileError) {
-    console.error("Błąd odczytu profilu:", profileError);
+    console.error("Error reading profile:", profileError);
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-zinc-800 text-zinc-50 p-8">
+    <div className="flex flex-col items-center justify-center min-h-screen p-8">
       <ModeToggle />
 
-      <p className="text-xl text-zinc-300 mb-8">
-        Jesteś zalogowany jako:{" "}
-        <strong>Witaj, {user.user_metadata?.username || user.email}!</strong>
+      <div className="flex flex-col items-center text-xl my-8">
+        <strong>Welcome!</strong>
         <br />
-        <strong className="text-white">{user?.email}</strong>.
-      </p>
+        Jesteś zalogowany jako:
+        <strong>{user.user_metadata?.username || user.email}</strong>
+        <strong>{user?.email}</strong>
+      </div>
 
       {profileData?.avatar_url ? (
         <Image
@@ -46,12 +47,13 @@ export default async function DashboardPage() {
           className="w-24 h-24 rounded-full border-2 border-green-400 shadow-lg object-cover mb-6"
         />
       ) : (
-        <div className="w-24 h-24 rounded-full bg-zinc-700 flex items-center justify-center">
+        <div className="w-24 h-24 rounded-full flex items-center justify-center">
           Brak avatara
         </div>
       )}
-      <p className="text-lg text-zinc-400 mb-10">
-        To jest chroniony widok Twojej aplikacji VOXIO.
+
+      <p className="mb-4">
+        <strong>ID:</strong> {user.id}
       </p>
 
       <form action={signOutAction}>
@@ -64,4 +66,6 @@ export default async function DashboardPage() {
       </form>
     </div>
   );
-}
+};
+
+export default DashboardPage;
