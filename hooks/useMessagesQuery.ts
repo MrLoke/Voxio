@@ -7,9 +7,11 @@ export type Message = {
   content: string;
   user_id: string;
   username: string;
+  room_id?: string;
+  attachment_url: string | null;
 };
 
-export const useMessagesQuery = () => {
+export const useMessagesQuery = (roomId: string) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +22,8 @@ export const useMessagesQuery = () => {
       setIsLoading(true);
       const { data, error } = await supabase
         .from("messages")
-        .select("id, content, username, user_id, created_at")
+        .select("*")
+        .eq("room_id", roomId)
         .order("created_at", { ascending: true })
         .limit(50);
 
@@ -34,9 +37,7 @@ export const useMessagesQuery = () => {
     };
 
     fetchMessages();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [roomId]);
 
   return { messages, isLoading, error, setMessages };
 };
