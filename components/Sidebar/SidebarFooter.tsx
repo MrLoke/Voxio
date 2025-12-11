@@ -22,6 +22,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { SETTINGS_ROUTE, USER_PROFILE_ROUTE } from "@/lib/constants";
+import Image from "next/image";
+import { getInitials } from "@/lib/helpers/getInitials";
 
 export const SidebarFooterSection = async () => {
   const supabase = await createClient();
@@ -41,7 +43,7 @@ export const SidebarFooterSection = async () => {
   }
 
   const displayName =
-    profileData?.username || user?.user_metadata?.username || "Użytkownik";
+    profileData?.username || user?.user_metadata?.username || "User";
   const displayEmail = user?.email || "";
 
   return (
@@ -54,11 +56,19 @@ export const SidebarFooterSection = async () => {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage
+                <Image
                   src={profileData?.avatar_url || ""}
                   alt={displayName}
+                  width={100}
+                  height={100}
                 />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                {/* <AvatarImage
+                  src={profileData?.avatar_url || ""}
+                  alt={displayName}
+                /> */}
+                <AvatarFallback className="rounded-lg">
+                  {getInitials(displayName)}
+                </AvatarFallback>
               </Avatar>
 
               <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">

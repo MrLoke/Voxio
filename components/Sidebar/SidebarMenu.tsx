@@ -36,7 +36,10 @@ export const SidebarMenuSection = () => {
       <SidebarGroupContent>
         <SidebarMenu className="gap-2">
           <SidebarMenuItem>
-            <Link href={DASHBOARD_ROUTE} className="flex font-medium">
+            <Link
+              href={DASHBOARD_ROUTE}
+              className="flex justify-center font-medium"
+            >
               <SidebarMenuButton tooltip="Dashboard" className={buttonClasses}>
                 <Circle>
                   <BiSolidHome className="h-5 w-5" />
@@ -49,7 +52,10 @@ export const SidebarMenuSection = () => {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <Link href={NOTIFICATIONS_ROUTE} className="flex font-medium">
+            <Link
+              href={NOTIFICATIONS_ROUTE}
+              className="flex justify-center font-medium"
+            >
               <SidebarMenuButton
                 tooltip="Notifications"
                 className={buttonClasses}
@@ -65,7 +71,10 @@ export const SidebarMenuSection = () => {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <Link href={MESSAGES_ROUTE} className="flex font-medium">
+            <Link
+              href={MESSAGES_ROUTE}
+              className="flex justify-center font-medium"
+            >
               <SidebarMenuButton tooltip="Messages" className={buttonClasses}>
                 <Circle>
                   <BiSolidChat className="h-5 w-5" />
@@ -78,7 +87,10 @@ export const SidebarMenuSection = () => {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <Link href={SETTINGS_ROUTE} className="flex font-medium">
+            <Link
+              href={SETTINGS_ROUTE}
+              className="flex justify-center font-medium"
+            >
               <SidebarMenuButton tooltip="Settings" className={buttonClasses}>
                 <Circle>
                   <BiSolidCog className="h-5 w-5" />
@@ -97,19 +109,30 @@ export const SidebarMenuSection = () => {
       </SidebarGroupLabel>
       <SidebarGroupContent className="mt-2 group-data-[collapsible=icon]:mt-8">
         <SidebarMenu className="gap-2">
-          <SidebarMenuItem className="mb-2 font-medium">
-            <SidebarMenuButton tooltip="Add new room" className={buttonClasses}>
-              <Circle>
-                <IoAddCircle className="h-5 w-5" />
-              </Circle>
-              <span className="group-data-[collapsible=icon]:hidden">
-                Add new room
-              </span>
-            </SidebarMenuButton>
+          <SidebarMenuItem className="mb-2 justify-center font-medium">
+            <Link
+              href={SETTINGS_ROUTE}
+              className="flex justify-center font-medium"
+            >
+              <SidebarMenuButton
+                tooltip="Add new room"
+                className={buttonClasses}
+              >
+                <Circle>
+                  <IoAddCircle className="h-5 w-5" />
+                </Circle>
+                <span className="group-data-[collapsible=icon]:hidden">
+                  Add new room
+                </span>
+              </SidebarMenuButton>
+            </Link>
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <Link href={ROOMS_LIST_ROUTE} className="flex font-medium">
+            <Link
+              href={ROOMS_LIST_ROUTE}
+              className="flex justify-center font-medium"
+            >
               <SidebarMenuButton
                 tooltip="#Test Room 1"
                 className={buttonClasses}
@@ -125,7 +148,10 @@ export const SidebarMenuSection = () => {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <Link href={ROOMS_LIST_ROUTE} className="flex font-medium">
+            <Link
+              href={ROOMS_LIST_ROUTE}
+              className="flex justify-center font-medium"
+            >
               <SidebarMenuButton
                 tooltip="#Test Room 2"
                 className={buttonClasses}
@@ -141,7 +167,10 @@ export const SidebarMenuSection = () => {
           </SidebarMenuItem>
 
           <SidebarMenuItem>
-            <Link href={ROOMS_LIST_ROUTE} className="flex font-medium">
+            <Link
+              href={ROOMS_LIST_ROUTE}
+              className="flex justify-center font-medium"
+            >
               <SidebarMenuButton
                 tooltip="#Test Room 3"
                 className={buttonClasses}

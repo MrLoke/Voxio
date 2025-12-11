@@ -1,13 +1,15 @@
 "use client";
 
 import { useSidebar } from "@/components/ui/sidebar";
-import { PanelLeftOpen, PanelRightOpen } from "lucide-react";
-import {
-  TbLayoutSidebarLeftCollapseFilled,
-  TbLayoutSidebarLeftExpandFilled,
-} from "react-icons/tb";
+import { cn } from "@/lib/utils";
+import { ArrowLeftFromLine, ArrowRightFromLine } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-export const CustomTrigger = () => {
+type Props = {
+  className?: string;
+};
+
+export const CustomTrigger = ({ className }: Props) => {
   const {
     state,
     open,
@@ -17,32 +19,36 @@ export const CustomTrigger = () => {
     isMobile,
     toggleSidebar,
   } = useSidebar();
-  console.log(
-    "state",
-    state,
-    "open",
-    open,
-    "openMobile",
-    openMobile,
-    "isMobile",
-    isMobile
-  );
 
   return (
     <div
-      className="flex sticky top-0 z-50 hover:cursor-pointer"
+      className={cn("flex sticky top-0 z-50 hover:cursor-pointer", className)}
       onClick={toggleSidebar}
     >
-      {open ? (
-        <TbLayoutSidebarLeftCollapseFilled
-          size={30}
-          className="text-app-primary hover:cursor-pointer"
-        />
+      {open || openMobile ? (
+        <Tooltip>
+          <TooltipTrigger>
+            <ArrowLeftFromLine
+              size={24}
+              className="text-amber-500 hover:cursor-pointer"
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Hide sidebar</p>
+          </TooltipContent>
+        </Tooltip>
       ) : (
-        <TbLayoutSidebarLeftExpandFilled
-          size={30}
-          className="text-app-primary hover:cursor-pointer"
-        />
+        <Tooltip>
+          <TooltipTrigger>
+            <ArrowRightFromLine
+              size={24}
+              className="text-amber-500 hover:cursor-pointer"
+            />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Show sidebar</p>
+          </TooltipContent>
+        </Tooltip>
       )}
     </div>
   );

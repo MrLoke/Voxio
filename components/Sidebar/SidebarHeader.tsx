@@ -2,6 +2,7 @@
 
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { VoxioLogo } from "../VoxioLogo/VoxioLogo";
+import { CustomTrigger } from "./CustomTrigger";
 
 export const SidebarHeaderSection = () => {
   const {
@@ -13,27 +14,20 @@ export const SidebarHeaderSection = () => {
     isMobile,
     toggleSidebar,
   } = useSidebar();
-  console.log(
-    "state",
-    state,
-    "open",
-    open,
-    "openMobile",
-    openMobile,
-    "isMobile",
-    isMobile
-  );
 
   return (
     <div className="flex items-center justify-evenly gap-2">
       {!open && !openMobile ? (
-        <VoxioLogo />
+        <div className="flex flex-col items-center mt-2">
+          <VoxioLogo width={40} height={40} />
+          <CustomTrigger className="mt-2" />
+        </div>
       ) : (
         <>
           <VoxioLogo />
           <svg
-            width="150"
-            height="60"
+            width="120"
+            height="40"
             viewBox="0 0 257 72"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -56,6 +50,7 @@ export const SidebarHeaderSection = () => {
               </linearGradient>
             </defs>
           </svg>
+          <CustomTrigger />
         </>
       )}
     </div>
