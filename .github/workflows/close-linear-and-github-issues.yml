@@ -16,10 +16,10 @@ jobs:
       - name: Extract Linear IDs and GitHub Issue numbers from commit
         id: extract
         run: |
-          LINEAR_IDS=$(git log -1 --pretty=%B | grep -o 'APP-[0-9]\+')
+          LINEAR_IDS=$(git log -1 --pretty=%B | grep -o 'APP-[0-9]\+' || true)
           echo "LINEAR_IDS=$LINEAR_IDS" >> $GITHUB_ENV
 
-          GH_ISSUES=$(git log -1 --pretty=%B | grep -o '#[0-9]\+' | tr -d '#')
+          GH_ISSUES=$(git log -1 --pretty=%B | grep -o '#[0-9]\+' | tr -d '#' || true)
           echo "GH_ISSUES=$GH_ISSUES" >> $GITHUB_ENV
 
       - name: Close Linear Tasks
