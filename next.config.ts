@@ -9,7 +9,27 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+      },
+      { protocol: "https", hostname: "i.ytimg.com", port: "", pathname: "/**" },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "opengraph.link-preview.js.domains",
+        port: "",
+        pathname: "/**",
+      },
+      { protocol: "https", hostname: "**", port: "", pathname: "/**" },
+      { protocol: "http", hostname: "**", port: "", pathname: "/**" },
     ],
+    unoptimized: false, // The source image will be optimized
     qualities: [75, 100],
   },
   compiler: {
