@@ -47,6 +47,25 @@
 }
 
 :root {
+  --plyr-audio-controls-background: transparent;
+  --plyr-audio-control-color: #4b5563;
+
+  --plyr-color-main: #5865f2;
+
+  --plyr-video-control-background-hover: rgba(0, 0, 0, 0.7);
+  --plyr-video-controls-background: linear-gradient(
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.7)
+  );
+
+  --plyr-video-control-color: #ffffff;
+  --plyr-video-control-color-hover: #ffffff;
+
+  --plyr-control-radius: 8px;
+  --plyr-menu-radius: 8px;
+
+  --plyr-font-family: inherit;
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
@@ -116,6 +135,51 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
+
+/* ------ Reply message ------ */
+.highlight-message {
+  animation: flashHighlight 1.2s ease-in-out;
+}
+
+@keyframes flashHighlight {
+  0% {
+    background-color: rgba(99, 102, 241, 0.25);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+/* ------ Reply message ------ */
+
+/* ------ Plyr video ------ */
+/* Progress bar */
+.plyr--full-ui input[type="range"] {
+  color: var(--plyr-color-main);
+}
+
+/* Rounding the entire player */
+.plyr {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.plyr__video-wrapper {
+  height: 100%;
+}
+
+.plyr--audio .plyr__controls {
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+}
+
+.plyr--audio .plyr__control.plyr__tab-focus,
+.plyr--audio .plyr__control:hover,
+.plyr--audio .plyr__control[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.1);
+}
+/* ------ Plyr video ------ */
 
 @layer base {
   * {
