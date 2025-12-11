@@ -1,0 +1,51 @@
+name: Close Linear Task and GitHub Issue
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  close-tasks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract Linear IDs and GitHub Issue numbers from commit
+        id: extract
+        run: |
+          LINEAR_IDS=$(git log -1 --pretty=%B | grep -o 'APP-[0-9]\+')
+          echo "LINEAR_IDS=$LINEAR_IDS" >> $GITHUB_ENV
+
+          GH_ISSUES=$(git log -1 --pretty=%B | grep -o '#[0-9]\+' | tr -d '#')
+          echo "GH_ISSUES=$GH_ISSUES" >> $GITHUB_ENV
+
+      - name: Close Linear Tasks
+        if: env.LINEAR_IDS != ''
+        run: |
+          for ID in $LINEAR_IDS; do
+            echo "Closing Linear task: $ID"
+            curl -X POST https://api.linear.app/graphql \
+              -H "Authorization: ${{ secrets.LINEAR_API_KEY }}" \
+              -H "Content-Type: application/json" \
+              -d '{"query":"mutation { issueUpdate(id: \"'$ID'\", input: {stateId: \"done\"}) { success }}"}'
+          done
+
+      - name: Close GitHub Issues
+        if: env.GH_ISSUES != ''
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issues = '${{ env.GH_ISSUES }}'.split(' ');
+            for (const num of issues) {
+              console.log(`Closing GitHub Issue #${num}`);
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: parseInt(num),
+                state: 'closed'
+              });
+            }
