@@ -4,12 +4,13 @@ import { storeMessage } from "./storeMessages";
 const supabase = createClient();
 const BUCKET_NAME = "chat_attachments";
 
-interface UploadMessageData {
+interface UploadFileAndStoreMessageArgs {
   file: File;
   currentUsername: string;
   userId: string;
   roomId: string;
   content?: string;
+  repliedToId?: number | null;
 }
 
 export const uploadFileAndStoreMessage = async ({
@@ -18,7 +19,8 @@ export const uploadFileAndStoreMessage = async ({
   userId,
   roomId,
   content = "",
-}: UploadMessageData) => {
+  repliedToId = null,
+}: UploadFileAndStoreMessageArgs) => {
   try {
     const fileExtension = file.name.split(".").pop();
     const filePath = `${userId}/${Date.now()}.${fileExtension}`;
@@ -42,6 +44,7 @@ export const uploadFileAndStoreMessage = async ({
       userId: userId,
       roomId: roomId,
       attachmentUrl: publicUrl,
+      repliedToId: repliedToId,
     });
 
     if (!success) {
