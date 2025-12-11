@@ -1,152 +1,333 @@
-import { useEffect, useState, useRef, useCallback } from "react";
-import { Message } from "./useMessagesQuery";
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import type {
+  SupabaseClient,
+  RealtimeChannel,
+  RealtimePostgresChangesPayload,
+} from "@supabase/supabase-js";
+import type { Message } from "./useMessagesQuery";
 import { createClient } from "@/lib/supabase/client";
-import { RealtimeChannel } from "@supabase/supabase-js";
+
+type UserProfile = {
+  id: string;
+  username: string | null;
+  avatar_url: string | null;
+};
+
+export type EnrichedMessage = Message & {
+  users?: UserProfile | null;
+  replied_to_message?: {
+    username: string;
+    content: string;
+    attachment_url: string | null;
+  } | null;
+  client_id?: string | null;
+};
 
 const TYPING_TIMEOUT = 3500;
+const supabase: SupabaseClient = createClient();
 
-const supabase = createClient();
+type OnMessageFn = (m: EnrichedMessage) => void;
 
-export function useRealtimeMessages(
+export const useRealtimeMessages = (
   roomId: string,
   currentUsername: string,
-  onNewMessage: (message: Message) => void
-) {
+  onNewMessage: OnMessageFn,
+  onUpdateMessage: OnMessageFn
+) => {
   const channelRef = useRef<RealtimeChannel | null>(null);
-  const [typingUsers, setTypingUsers] = useState<
-    Record<string, { lastActive: number }>
-  >({});
-  const [authToken, setAuthToken] = useState<string | null>(null);
-  const [sessionLoaded, setSessionLoaded] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const currentRoomRef = useRef<string | null>(null);
+
+  const onNewMessageRef = useRef<OnMessageFn>(onNewMessage);
+  const onUpdateMessageRef = useRef<OnMessageFn>(onUpdateMessage);
+
+  const authTokenRef = useRef<string | null>(null);
+
+  const [typingUsersMap, setTypingUsersMap] = useState<Record<string, number>>(
+    {}
+  );
+  const [sessionLoaded, setSessionLoaded] = useState<boolean>(false);
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.access_token) {
-        setAuthToken(session.access_token);
-        console.log("Sesja użytkownika (JWT) załadowana.");
-      } else {
-        setAuthToken(null);
-        console.log("Brak sesji użytkownika.");
-      }
-      setSessionLoaded(true);
-    });
+    onNewMessageRef.current = onNewMessage;
+  }, [onNewMessage]);
+
+  useEffect(() => {
+    onUpdateMessageRef.current = onUpdateMessage;
+  }, [onUpdateMessage]);
+
+  useEffect(() => {
+    let mounted = true;
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        if (!mounted) return;
+        authTokenRef.current = data.session?.access_token ?? null;
+        setSessionLoaded(true);
+      })
+      .catch((err) => {
+        console.warn("Failed to get supabase session for realtime:", err);
+        setSessionLoaded(true);
+      });
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  const updateTypingStatus = useCallback(
-    (user: string, isTyping: boolean) => {
-      if (user === currentUsername) return;
+  const enrichMessage = useCallback(
+    async (raw: Message): Promise<EnrichedMessage> => {
+      try {
+        let userPromise = Promise.resolve({ data: null, error: null } as any);
 
-      setTypingUsers((prev) => {
-        if (isTyping) {
-          return { ...prev, [user]: { lastActive: Date.now() } };
-        } else {
-          const { [user]: _, ...rest } = prev;
-          return rest;
+        if (raw.user_id) {
+          userPromise = supabase
+            .from("users")
+            .select("id, username, avatar_url")
+            .eq("id", raw.user_id)
+            .single();
         }
-      });
+
+        let replyPromise = Promise.resolve({ data: null, error: null } as any);
+
+        if (raw.replied_to_id) {
+          replyPromise = supabase
+            .from("messages")
+            .select("username, content, attachment_url")
+            .eq("id", raw.replied_to_id)
+            .single();
+        }
+
+        const [userResult, replyResult] = await Promise.all([
+          userPromise,
+          replyPromise,
+        ]);
+
+        const users =
+          userResult.data != null
+            ? {
+                username: userResult.data.username,
+                avatar_url: userResult.data.avatar_url,
+              }
+            : {
+                username: raw.username || "Unknown",
+                avatar_url: null,
+              };
+
+        const repliedToMessage =
+          replyResult.data != null
+            ? {
+                username: replyResult.data.username || "Unknown",
+                content: replyResult.data.content || "",
+                attachment_url: replyResult.data.attachment_url || null,
+              }
+            : null;
+
+        return {
+          ...raw,
+          users,
+          replied_to_message: repliedToMessage,
+        } as EnrichedMessage;
+      } catch (err) {
+        console.error("Error enriching message:", err);
+        return {
+          ...raw,
+          users: { username: raw.username || "Unknown", avatar_url: null },
+          replied_to_message: null,
+        } as EnrichedMessage;
+      }
     },
-    [currentUsername]
+    []
+  );
+
+  const handleInsertPayload = useCallback(
+    async (payload: RealtimePostgresChangesPayload<Message> | null) => {
+      if (!payload || !payload.new) return;
+      const raw = payload.new as Message;
+      const enriched = await enrichMessage(raw);
+      onNewMessageRef.current(enriched);
+    },
+    [enrichMessage]
+  );
+
+  const handleUpdatePayload = useCallback(
+    async (payload: RealtimePostgresChangesPayload<Message> | null) => {
+      if (!payload || !payload.new) return;
+      const raw = payload.new as Message;
+      const enriched = await enrichMessage(raw);
+      onUpdateMessageRef.current(enriched);
+    },
+    [enrichMessage]
   );
 
   useEffect(() => {
-    if (!sessionLoaded) return;
+    if (Object.keys(typingUsersMap).length === 0) return;
+    const interval = setInterval(() => {
+      const now = Date.now();
+      let changed = false;
+      const next: Record<string, number> = {};
+      for (const k of Object.keys(typingUsersMap)) {
+        if (now - typingUsersMap[k] < TYPING_TIMEOUT) {
+          next[k] = typingUsersMap[k];
+        } else {
+          changed = true;
+        }
+      }
+      if (changed) setTypingUsersMap(next);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [typingUsersMap]);
 
-    const channelName = `room:${roomId}`;
-    console.log(`Inicjalizacja kanału: ${channelName}`);
+  useEffect(() => {
+    if (!sessionLoaded || !roomId) return;
 
-    if (channelRef.current) {
-      supabase.removeChannel(channelRef.current);
-      setIsSubscribed(false);
+    if (channelRef.current && currentRoomRef.current === roomId) {
+      return;
     }
 
-    const channelOptions = authToken
-      ? {
-          config: {
-            presence: { key: currentUsername },
-            headers: { authorization: `Bearer ${authToken}` },
-          },
-        }
-      : undefined;
+    if (channelRef.current) {
+      try {
+        supabase.removeChannel(channelRef.current);
+      } catch {
+        /* ignore */
+      }
+      channelRef.current = null;
+      currentRoomRef.current = null;
+      queueMicrotask(() => setIsSubscribed(false));
+    }
 
-    channelRef.current = supabase.channel(`public:messages`, channelOptions);
+    const options =
+      authTokenRef.current != null
+        ? {
+            config: {
+              presence: { key: currentUsername },
+              headers: { authorization: `Bearer ${authTokenRef.current}` },
+            },
+          }
+        : undefined;
 
-    channelRef.current
+    const ch = supabase.channel(`room_messages:${roomId}`, options);
+
+    ch.on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "messages",
+        filter: `room_id=eq.${roomId}`,
+      },
+      (payload: RealtimePostgresChangesPayload<Message>) => {
+        void handleInsertPayload(payload);
+      }
+    )
       .on(
         "postgres_changes",
         {
-          event: "INSERT",
+          event: "UPDATE",
           schema: "public",
           table: "messages",
           filter: `room_id=eq.${roomId}`,
         },
-        (payload) => {
-          const newMessage = payload.new as Message;
-          if (typeof onNewMessage === "function") {
-            onNewMessage(newMessage);
-          }
+        (payload: RealtimePostgresChangesPayload<Message>) => {
+          void handleUpdatePayload(payload);
         }
       )
-      .on("broadcast", { event: "typing" }, (payload) => {
-        const { user, isTyping } = payload.payload;
-        updateTypingStatus(user, isTyping);
+      .on("broadcast", { event: "typing" }, (incoming) => {
+        try {
+          const payload = incoming.payload ?? incoming;
+          const user = payload?.user as string | undefined;
+          const isTyping = Boolean(
+            payload?.isTyping ?? payload?.is_typing ?? payload?.isTyping
+          );
+          if (!user || user === currentUsername) return;
+          setTypingUsersMap((prev) => {
+            const copy = { ...prev };
+            if (isTyping) copy[user] = Date.now();
+            else delete copy[user];
+            return copy;
+          });
+        } catch {}
       })
       .subscribe((status) => {
-        if (status === "SUBSCRIBED") {
-          console.log("Subskrypcja Realtime pomyślna!");
-          setIsSubscribed(true);
-        }
+        const s = String(status);
+        const subscribed = s === "SUBSCRIBED" || s === "CHANNEL_JOINED";
+        setIsSubscribed(subscribed);
       });
+
+    channelRef.current = ch;
+    currentRoomRef.current = roomId;
 
     return () => {
       if (channelRef.current) {
-        supabase.removeChannel(channelRef.current);
+        try {
+          supabase.removeChannel(channelRef.current);
+        } catch {
+          /* ignore */
+        }
+        channelRef.current = null;
+        currentRoomRef.current = null;
         setIsSubscribed(false);
       }
     };
   }, [
-    sessionLoaded,
-    authToken,
-    onNewMessage,
-    currentUsername,
-    updateTypingStatus,
     roomId,
+    sessionLoaded,
+    currentUsername,
+    handleInsertPayload,
+    handleUpdatePayload,
   ]);
 
-  useEffect(() => {
-    if (Object.keys(typingUsers).length === 0) return;
-
-    const interval = setInterval(() => {
-      const now = Date.now();
-      setTypingUsers((prev) => {
-        let shouldUpdate = false;
-        const newUsers: Record<string, { lastActive: number }> = {};
-
-        for (const user in prev) {
-          if (now - prev[user].lastActive < TYPING_TIMEOUT) {
-            newUsers[user] = prev[user];
-          } else {
-            shouldUpdate = true;
-          }
+  const sendTypingEvent = useCallback(
+    (isTyping: boolean) => {
+      const ch = channelRef.current;
+      if (!ch || !isSubscribed) return;
+      try {
+        ch.send({
+          type: "broadcast",
+          event: "typing",
+          payload: { user: currentUsername, isTyping },
+        });
+        if (isTyping) {
+          setTypingUsersMap((prev) => ({
+            ...prev,
+            [currentUsername]: Date.now(),
+          }));
+        } else {
+          setTypingUsersMap((prev) => {
+            const copy = { ...prev };
+            delete copy[currentUsername];
+            return copy;
+          });
         }
-        return shouldUpdate ? newUsers : prev;
-      });
-    }, 1000);
+      } catch (err) {
+        console.warn("Failed to send typing event", err);
+      }
+    },
+    [currentUsername, isSubscribed]
+  );
 
-    return () => clearInterval(interval);
-  }, [typingUsers]);
+  const typingUsers = Object.keys(typingUsersMap).filter(
+    (u) => u !== currentUsername
+  );
 
-  const sendTypingEvent = (isTyping: boolean) => {
-    if (channelRef.current && isSubscribed) {
-      channelRef.current.send({
-        type: "broadcast",
-        event: "typing",
-        payload: { user: currentUsername, isTyping },
-      });
+  const reconnect = useCallback(() => {
+    if (!currentRoomRef.current) return;
+    if (channelRef.current) {
+      try {
+        supabase.removeChannel(channelRef.current);
+      } catch {
+        /* ignore */
+      }
+      channelRef.current = null;
+      setIsSubscribed(false);
     }
-  };
+  }, []);
 
-  const activeTypingUsers = Object.keys(typingUsers);
-
-  return { typingUsers: activeTypingUsers, sendTypingEvent };
-}
+  return {
+    typingUsers,
+    sendTypingEvent,
+    isSubscribed,
+    reconnect,
+  } as const;
+};
