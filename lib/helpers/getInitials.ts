@@ -5,44 +5,37 @@
  * @returns Inicjały w dużych literach (np. "JD", "A").
  */
 export const getInitials = (name: string): string => {
-  // 1. Oczyść i podziel ciąg na słowa
   const words = name
     .trim()
-    .split(/\s+/) // Podziel po spacji/wielu spacjach
+    .split(/\s+/)
     .filter((word) => word.length > 0);
 
   let initials = "";
 
   if (words.length === 0) {
-    // Brak słów lub ciąg pusty
     return "";
   }
 
-  // 2. Dodaj pierwszą literę pierwszego słowa
   initials += words[0][0];
 
-  // 3. Jeśli istnieje drugie słowo, dodaj jego pierwszą literę
   if (words.length >= 2) {
     initials += words[1][0];
   }
 
-  // 4. Zwróć wynik w dużych literach
   return initials.toUpperCase();
 };
 
-// 1. Definicja Palety Kolorów
-// Używamy kodów HEX lub nazw kolorów CSS. Zmień je na kolory pasujące do Twojej aplikacji.
 const COLOR_PALETTE: string[] = [
-  "#F44336", // Czerwony
-  "#E91E63", // Różowy
-  "#9C27B0", // Fioletowy
-  "#3F51B5", // Indygo
-  "#2196F3", // Niebieski
-  "#00BCD4", // Cyjan
-  "#009688", // Turkusowy
-  "#4CAF50", // Zielony
-  "#FFC107", // Bursztynowy
-  "#FF9800", // Pomarańczowy
+  "#F44336",
+  "#E91E63",
+  "#9C27B0",
+  "#3F51B5",
+  "#2196F3",
+  "#00BCD4",
+  "#009688",
+  "#4CAF50",
+  "#FFC107",
+  "#FF9800",
 ];
 
 /**
@@ -55,8 +48,8 @@ const hashCode = (str: string): number => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
-    hash = (hash << 5) - hash + char; // hash * 31 + char, ale szybciej
-    hash |= 0; // Konwersja na 32-bitową liczbę całkowitą ze znakiem
+    hash = (hash << 5) - hash + char;
+    hash |= 0;
   }
   return hash;
 };
@@ -67,10 +60,8 @@ const hashCode = (str: string): number => {
  * @returns Kod koloru (string) zdefiniowany w COLOR_PALETTE.
  */
 export const getAvatarColor = (identifier: string): string => {
-  // Upewniamy się, że hasz jest zawsze nieujemny
   const hash = Math.abs(hashCode(identifier));
 
-  // Wybieramy indeks z palety: hash modulo rozmiar palety
   const index = hash % COLOR_PALETTE.length;
 
   return COLOR_PALETTE[index];
