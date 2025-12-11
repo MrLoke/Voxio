@@ -1,0 +1,26 @@
+name: Manual Tag Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Enter the tag name, e.g., 0.3.0-pre-alpha'
+        required: true
+        default: '0.3.0-pre-alpha'
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ github.event.inputs.tag_name }}
+          git push origin ${{ github.event.inputs.tag_name }}
+        env:
+          TAG_NAME: ${{ github.event.inputs.tag_name }}
